@@ -13,7 +13,7 @@
 <h4>App structure</h4>
 
 &ndash; dagger2<br>
-&ndash; mvvvm<br>
+&ndash; mvvm<br>
 &ndash; datastore<br>
 &ndash; multi modules<br>
 &ndash; build-logic<br>
