@@ -46,13 +46,15 @@ dependencies {
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
     implementation(libs.androidx.constraintlayout)
-    implementation (libs.play.services.auth)
+    implementation(libs.play.services.auth)
 
     //firebase
     implementation(platform(libs.firebase.bom))
     implementation(libs.firebase.auth)
     implementation(libs.firebase.remoteconfig)
     implementation(libs.firebase.database)
+    implementation(libs.firebase.analytics.ktx)
+    implementation(libs.firebase.crashlytics.ktx)
 
     //dagger
     implementation(libs.dagger)
@@ -61,14 +63,14 @@ dependencies {
     kapt(libs.dagger.android.processor)
 
     //navigation
-    implementation (libs.androidx.navigation.fragment.ktx)
-    implementation (libs.androidx.navigation.ui.ktx)
+    implementation(libs.androidx.navigation.fragment.ktx)
+    implementation(libs.androidx.navigation.ui.ktx)
 
     //images
-    implementation( libs.circleimageview)
-    implementation (libs.glide)
+    implementation(libs.circleimageview)
+    implementation(libs.glide)
 
     //google
-    implementation (libs.gson)
+    implementation(libs.gson)
 
- }
+}
