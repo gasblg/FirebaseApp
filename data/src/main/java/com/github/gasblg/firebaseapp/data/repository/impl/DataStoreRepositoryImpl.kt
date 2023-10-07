@@ -23,7 +23,7 @@ class DataStoreRepositoryImpl(context: Context) : DataStoreRepository {
                 throw exception
             }
         }.map {
-            UserProfile(it.uid, it.name, it.email, it.photo)
+            UserProfile(it.uid, it.name, it.email, it.photo, it.dateCreated, it.dateSignedIn)
         }
 
     override suspend fun updateUser(profile: UserProfile?) {
@@ -44,5 +44,7 @@ class DataStoreRepositoryImpl(context: Context) : DataStoreRepository {
         .setName(profile?.name)
         .setEmail(profile?.email)
         .setPhoto(profile?.photo)
+        .setDateCreated(profile?.dateCreated)
+        .setDateSignedIn(profile?.dateSignedIn)
         .build()
 }

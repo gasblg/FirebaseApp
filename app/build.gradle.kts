@@ -16,6 +16,15 @@ android {
     }
 
     buildTypes {
+
+        debug {
+            isMinifyEnabled = false
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro"
+            )
+        }
+
         release {
             isMinifyEnabled = false
             proguardFiles(
@@ -35,6 +44,7 @@ dependencies {
     implementation(project(":presentation"))
     implementation(project(":data"))
     implementation(project(":domain"))
+    implementation(project(":analytics"))
 
     //testing
     testImplementation(libs.junit4)

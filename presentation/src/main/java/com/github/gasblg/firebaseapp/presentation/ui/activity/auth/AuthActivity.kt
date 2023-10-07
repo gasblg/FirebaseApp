@@ -18,11 +18,15 @@ import androidx.activity.result.contract.ActivityResultContracts.StartActivityFo
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import com.github.gasblg.firebaseapp.analytics.manager.AnalyticsManager
+import com.github.gasblg.firebaseapp.domain.usecases.date.DateConverterUseCase
+import com.github.gasblg.firebaseapp.analytics.model.InfoModel
 import com.github.gasblg.firebaseapp.presentation.R
 import com.github.gasblg.firebaseapp.presentation.Transitions
 import com.github.gasblg.firebaseapp.presentation.databinding.ActivityAuthBinding
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
+import com.google.firebase.auth.FirebaseUser
 import kotlinx.coroutines.launch
 
 
@@ -36,6 +40,13 @@ class AuthActivity : DaggerAppCompatActivity() {
 
     @Inject
     lateinit var authInstance: FirebaseAuth
+
+    @Inject
+    lateinit var analytics: AnalyticsManager
+
+    @Inject
+    lateinit var dateConverterUseCase: DateConverterUseCase
+
 
     private lateinit var binding: ActivityAuthBinding
 
@@ -74,11 +85,12 @@ class AuthActivity : DaggerAppCompatActivity() {
     }
 
     private fun observeProfile() {
-         lifecycleScope.launch {
+        lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.saveProfile.collect {
                     val user = FirebaseAuth.getInstance().currentUser
                     if (it && user != null) {
+                        analytics.login()
                         startActivity(Transitions.startMain(this@AuthActivity))
                     }
                 }
@@ -92,6 +104,7 @@ class AuthActivity : DaggerAppCompatActivity() {
             val firebaseUser = it.result.user
             if (it.isSuccessful) {
                 firebaseUser?.let { user ->
+                    sendEvent(user)
                     viewModel.setUser(user)
                 }
             } else {
@@ -100,6 +113,15 @@ class AuthActivity : DaggerAppCompatActivity() {
         }
     }
 
+    private fun sendEvent(user: FirebaseUser) {
+        analytics.identify(
+            InfoModel(
+                user.uid,
+                dateConverterUseCase.invoke(user.metadata?.creationTimestamp),
+                dateConverterUseCase.invoke(user.metadata?.lastSignInTimestamp)
+            )
+        )
+    }
 
     private fun showToast() {
         Toast.makeText(this, getString(R.string.sign_in_failed), Toast.LENGTH_LONG).show()

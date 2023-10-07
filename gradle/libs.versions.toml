@@ -24,6 +24,7 @@ navigationUiKtx = "2.6.0"
 playServicesAuth = "20.7.0"
 protobufJavalite = "3.24.0"
 firebaseCrashlyticsPlugin = "2.9.2"
+org-jetbrains-kotlin-android = "1.8.0"
 
 [libraries]
 android-desugarJdkLibs = { group = "com.android.tools", name = "desugar_jdk_libs", version.ref = "androidDesugarJdkLibs" }
@@ -61,4 +62,6 @@ kotlin-gradlePlugin = { group = "org.jetbrains.kotlin", name = "kotlin-gradle-pl
 android-application = { id = "com.android.application", version.ref = "androidGradlePlugin" }
 kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 firebase-crashlytics = { id = "com.google.firebase.crashlytics", version.ref = "firebaseCrashlyticsPlugin" }
+com-android-library = { id = "com.android.library", version.ref = "androidGradlePlugin" }
+org-jetbrains-kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "org-jetbrains-kotlin-android" }
 

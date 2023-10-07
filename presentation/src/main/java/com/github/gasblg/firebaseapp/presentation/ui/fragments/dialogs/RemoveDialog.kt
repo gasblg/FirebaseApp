@@ -6,13 +6,20 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.os.bundleOf
 import androidx.fragment.app.DialogFragment
+import com.github.gasblg.firebaseapp.analytics.data.Event
+import com.github.gasblg.firebaseapp.analytics.data.Param
+import com.github.gasblg.firebaseapp.analytics.manager.AnalyticsManager
 import com.github.gasblg.firebaseapp.presentation.R
 import com.github.gasblg.firebaseapp.presentation.databinding.DialogRemoveBinding
+import com.github.gasblg.firebaseapp.presentation.di.DaggerBottomSheetDialogFragment
 import com.github.gasblg.firebaseapp.presentation.ui.fragments.main.MainFragment
-import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import javax.inject.Inject
 
 
-class RemoveDialog : BottomSheetDialogFragment() {
+class RemoveDialog : DaggerBottomSheetDialogFragment() {
+
+    @Inject
+    lateinit var analytics: AnalyticsManager
 
     companion object {
 
@@ -49,6 +56,11 @@ class RemoveDialog : BottomSheetDialogFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        analytics.openRemoveDialog()
+        initArguments()
+    }
+
+    private fun initArguments() {
         arguments?.let {
             val id = it.getString(ID) as String
             bindClicks(id)
@@ -57,19 +69,26 @@ class RemoveDialog : BottomSheetDialogFragment() {
 
     private fun bindClicks(itemId: String) {
         binding?.remove?.setOnClickListener {
-            val data = bundleOf(MainFragment.ITEM_ID to itemId)
-            requireActivity().supportFragmentManager.setFragmentResult(
-                MainFragment.REMOVE_KEY,
-                data
-            )
+            analytics.actionTap(Event.REMOVE_TAP, Param.REMOVE)
+            sendResult(itemId)
             dismiss()
         }
         binding?.cancel?.setOnClickListener {
+            analytics.actionTap(Event.REMOVE_TAP, Param.CANCEL)
             dismiss()
         }
         binding?.close?.setOnClickListener {
+            analytics.actionTap(Event.REMOVE_TAP, Param.CLOSE)
             dismiss()
         }
+    }
+
+    private fun sendResult(itemId: String) {
+        val data = bundleOf(MainFragment.ITEM_ID to itemId)
+        requireActivity().supportFragmentManager.setFragmentResult(
+            MainFragment.REMOVE_KEY,
+            data
+        )
     }
 
     override fun onDestroyView() {

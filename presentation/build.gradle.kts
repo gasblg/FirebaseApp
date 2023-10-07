@@ -15,6 +15,7 @@ android {
 dependencies {
 
     implementation(project(":domain"))
+    implementation(project(":analytics"))
 
     //navigation
     implementation (libs.androidx.navigation.fragment.ktx)

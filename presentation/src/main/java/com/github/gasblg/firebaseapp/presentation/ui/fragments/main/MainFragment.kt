@@ -5,18 +5,21 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.navigation.Navigation
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
+import com.github.gasblg.firebaseapp.analytics.data.Event
+import com.github.gasblg.firebaseapp.analytics.manager.AnalyticsManager
 import com.github.gasblg.firebaseapp.domain.models.Item
-import com.github.gasblg.firebaseapp.presentation.R
-import com.github.gasblg.firebaseapp.presentation.Transitions
+import com.github.gasblg.firebaseapp.presentation.*
 import com.github.gasblg.firebaseapp.presentation.databinding.FragmentMainBinding
 import com.github.gasblg.firebaseapp.presentation.ui.fragments.dialogs.AddDialog
 import com.github.gasblg.firebaseapp.presentation.ui.fragments.dialogs.RemoveDialog
+import com.github.gasblg.firebaseapp.presentation.ui.swipe.SwipeController
 
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.firebase.auth.FirebaseAuth
@@ -36,6 +39,9 @@ class MainFragment : DaggerFragment() {
     @Inject
     lateinit var authInstance: FirebaseAuth
 
+    @Inject
+    lateinit var analytics: AnalyticsManager
+
     private lateinit var adapter: MainAdapter
     private var binding: FragmentMainBinding? = null
 
@@ -52,12 +58,16 @@ class MainFragment : DaggerFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
+        analytics.openMainScreen()
         initAdapter()
         initRecycler()
         bindClicks()
         bindListener()
         observeData()
+
+        val swipeController = SwipeController(requireContext(), this@MainFragment.adapter)
+        val itemTouchHelper = ItemTouchHelper(swipeController)
+        itemTouchHelper.attachToRecyclerView(binding?.recyclerView)
     }
 
     private fun signOut() {
@@ -65,6 +75,7 @@ class MainFragment : DaggerFragment() {
         googleSignInClient.signOut()
         viewModel.logOut()
         navigateToAuth()
+        analytics.logout()
     }
 
     private fun navigateToAuth() {
@@ -81,18 +92,28 @@ class MainFragment : DaggerFragment() {
     private fun initAdapter() {
         adapter = MainAdapter()
         adapter.apply {
-            setOnItemClickListener { item ->
-                Toast.makeText(
-                    context,
-                    "name: ${item.name}\ndescription: ${item.description}",
-                    Toast.LENGTH_SHORT
-                ).show()
+            setOnItemClickListener { item, position ->
+                analytics.itemTap(Event.ITEM_OPEN_TAP, item.name, item.description, position)
+                openDetail(item)
             }
-            setOnDeleteItemClickListener { item ->
+            setOnDeleteItemClickListener { item, position ->
+                analytics.itemTap(Event.ITEM_REMOVE_SWIPE, item.name, item.description, position)
                 val dialog = RemoveDialog.createInstance(item.id)
                 dialog.show(childFragmentManager, RemoveDialog.TAG)
             }
+            setOnEditItemClickListener { item, position ->
+                analytics.itemTap(Event.ITEM_EDIT_TAP, item.name, item.description, position)
+                val dialog = AddDialog.createInstance(AddDialog.EDIT, item)
+                dialog.show(childFragmentManager, AddDialog.TAG)
+            }
         }
+    }
+
+    private fun openDetail(item: Item) {
+        val bundle = Bundle()
+        bundle.putString(ITEM_ID, item.id)
+        val navController = Navigation.findNavController(requireActivity(), R.id.nav_host_fragment)
+        navController.navigate(R.id.action_mainFragment_to_detailFragment, bundle)
     }
 
     private fun initRecycler() {
@@ -106,10 +127,12 @@ class MainFragment : DaggerFragment() {
     private fun bindClicks() {
         with(binding!!) {
             fab.setOnClickListener {
-                val dialog = AddDialog()
+                analytics.itemAddTap()
+                val dialog = AddDialog.createInstance(AddDialog.ADD)
                 dialog.show(childFragmentManager, AddDialog.TAG)
             }
             ivExit.setOnClickListener {
+                analytics.itemLogoutTap()
                 signOut()
             }
         }
@@ -126,12 +149,16 @@ class MainFragment : DaggerFragment() {
             viewLifecycleOwner
         ) { _, result ->
             val item = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                result.getSerializable(ITEM, Item::class.java)
+                result.getSerializable(AddDialog.ITEM, Item::class.java)
             } else {
-                result.getSerializable(ITEM) as Item
+                result.getSerializable(AddDialog.ITEM) as Item
             }
-            item?.let {
-                viewModel.addItem(it)
+            val itemType = result.getString(AddDialog.ITEM_TYPE) as String
+
+            if (itemType == AddDialog.ADD) {
+                viewModel.addItem(item)
+            } else {
+                viewModel.editItem(item)
             }
         }
     }
@@ -219,8 +246,8 @@ class MainFragment : DaggerFragment() {
         const val ADD_KEY = "add_key"
         const val REMOVE_KEY = "remove_key"
 
-        const val ITEM = "item"
         const val ITEM_ID = "item_id"
-
+        const val TAG = "MainFragment"
     }
+
 }

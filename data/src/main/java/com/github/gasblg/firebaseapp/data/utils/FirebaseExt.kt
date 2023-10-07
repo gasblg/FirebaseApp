@@ -10,7 +10,7 @@ import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
 
-fun <T> DatabaseReference.addValueEventListenerFlowList(
+fun <T> DatabaseReference.getEventListenerFlowList(
     dataType: Class<T>
 ): Flow<Response<List<T>>> = callbackFlow {
     trySend(Response.Loading)
@@ -31,11 +31,36 @@ fun <T> DatabaseReference.addValueEventListenerFlowList(
         }
 
         override fun onCancelled(error: DatabaseError) {
-            cancel()
             trySend(Response.Failure(error.toException()))
+            cancel()
         }
     }
     addValueEventListener(listener)
     awaitClose { removeEventListener(listener) }
 }
 
+
+fun <T> DatabaseReference.getEventListenerFlow(
+    dataType: Class<T>
+): Flow<Response<T>> = callbackFlow {
+    trySend(Response.Loading)
+    val listener = object : ValueEventListener {
+        override fun onDataChange(dataSnapshot: DataSnapshot) {
+            if (dataSnapshot.exists()) {
+                val item = dataSnapshot.getValue(dataType)
+                item?.let {
+                    trySend(Response.Success(it))
+                }
+            } else {
+                trySend(Response.Empty)
+            }
+        }
+
+        override fun onCancelled(error: DatabaseError) {
+            trySend(Response.Failure(error.toException()))
+            cancel()
+        }
+    }
+    addValueEventListener(listener)
+    awaitClose { removeEventListener(listener) }
+}

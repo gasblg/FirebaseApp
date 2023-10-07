@@ -5,9 +5,10 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.github.gasblg.firebaseapp.domain.models.Item
+import com.github.gasblg.firebaseapp.presentation.ui.swipe.SwipeControllerActions
 import com.github.gasblg.firebaseapp.presentation.databinding.ItemBinding
 
-class MainAdapter : RecyclerView.Adapter<MainAdapter.ItemHolder>() {
+class MainAdapter : RecyclerView.Adapter<MainAdapter.ItemHolder>(), SwipeControllerActions {
 
     private var itemsList = listOf<Item>()
 
@@ -36,18 +37,23 @@ class MainAdapter : RecyclerView.Adapter<MainAdapter.ItemHolder>() {
         holder.bind(item)
     }
 
-    private lateinit var onItemClickListener: ((item: Item) -> Unit)
+    private lateinit var onItemClickListener: ((item: Item, position: Int) -> Unit)
 
-    fun setOnItemClickListener(onItemClickListener: (item: Item) -> Unit) {
+    fun setOnItemClickListener(onItemClickListener: (item: Item, position: Int) -> Unit) {
         this.onItemClickListener = onItemClickListener
     }
 
-    private lateinit var onDeleteItemClickListener: ((item: Item) -> Unit)
+    private lateinit var onDeleteItemClickListener: ((item: Item, position: Int) -> Unit)
 
-    fun setOnDeleteItemClickListener(onDeleteItemClickListener: (item: Item) -> Unit) {
+    fun setOnDeleteItemClickListener(onDeleteItemClickListener: (item: Item, position: Int) -> Unit) {
         this.onDeleteItemClickListener = onDeleteItemClickListener
     }
 
+    private lateinit var onEditItemClickListener: ((item: Item, position: Int) -> Unit)
+
+    fun setOnEditItemClickListener(onEditItemClickListener: (item: Item, position: Int) -> Unit) {
+        this.onEditItemClickListener = onEditItemClickListener
+    }
 
     @SuppressLint("NotifyDataSetChanged")
     fun setData(list: List<Item>) {
@@ -68,13 +74,11 @@ class MainAdapter : RecyclerView.Adapter<MainAdapter.ItemHolder>() {
                         tvDescription.text = item.description
 
                         this.root.setOnClickListener {
-                            onItemClickListener.invoke(item)
+                            onItemClickListener.invoke(item, adapterPosition)
                         }
 
                         this.root.setOnLongClickListener {
-                            onDeleteItemClickListener.invoke(
-                                item
-                            )
+                            onEditItemClickListener.invoke(item, adapterPosition)
                             true
                         }
 
@@ -84,6 +88,13 @@ class MainAdapter : RecyclerView.Adapter<MainAdapter.ItemHolder>() {
             }
         }
     }
+
+    override fun onRightClicked(position: Int) {
+        val item = itemsList[position]
+        onDeleteItemClickListener.invoke(item, position)
+        notifyItemChanged(position)
+    }
+
 }
 
 

@@ -2,6 +2,8 @@ package com.github.gasblg.firebaseapp.data.di
 
 import android.app.Application
 import com.github.gasblg.firebaseapp.App
+import com.github.gasblg.firebaseapp.analytics.di.AnalyticsModule
+import com.github.gasblg.firebaseapp.analytics.di.CrashlyticsModule
 import com.github.gasblg.firebaseapp.domain.di.FirebaseModule
 import com.github.gasblg.firebaseapp.domain.di.UseCasesModule
 import com.github.gasblg.firebaseapp.presentation.di.ActivityBuilder
@@ -21,7 +23,10 @@ import javax.inject.Singleton
         GoogleModule::class,
         UseCasesModule::class,
         RepositoriesModule::class,
-        FirebaseModule::class
+        FirebaseModule::class,
+        AnalyticsModule::class,
+        CrashlyticsModule::class,
+        DateModule::class
     ]
 )
 interface AppComponent : AndroidInjector<App> {

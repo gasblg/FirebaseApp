@@ -14,6 +14,7 @@ class AndroidLibraryConventionPlugin : Plugin<Project> {
                 apply("com.android.library")
                 apply("org.jetbrains.kotlin.android")
                 apply("kotlin-kapt")
+                apply("com.google.firebase.crashlytics")
             }
 
             extensions.configure<LibraryExtension> {
@@ -37,8 +38,10 @@ class AndroidLibraryConventionPlugin : Plugin<Project> {
 
                 //firebase
                 add("implementation", platform("com.google.firebase:firebase-bom:32.2.2"))
-                add("implementation", "com.google.firebase:firebase-config-ktx")
                 add("implementation", "com.google.firebase:firebase-auth")
+                add("implementation", "com.google.firebase:firebase-analytics-ktx")
+                add("implementation", "com.google.firebase:firebase-crashlytics-ktx")
+                add("implementation", "com.google.firebase:firebase-config-ktx")
                 add("implementation", "com.google.firebase:firebase-database")
 
                 //dagger

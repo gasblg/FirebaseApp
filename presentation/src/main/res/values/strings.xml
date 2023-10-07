@@ -5,10 +5,13 @@
     <string name="yes_delete">Yes, remove it</string>
     <string name="remove_item">Remove item?</string>
     <string name="add_item">Add item</string>
+    <string name="edit_item">Edit item</string>
     <string name="add">Add</string>
+    <string name="edit">Edit</string>
     <string name="name">Name</string>
     <string name="description">Description</string>
     <string name="empty">List is empty</string>
+    <string name="no_data">No data</string>
     <string name="not_filled">fields are not filled</string>
     <string name="list_of_items">Items:</string>
     <string name="sign_in_failed">"Google sign in failed:("</string>

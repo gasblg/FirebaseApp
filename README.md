@@ -5,8 +5,10 @@
 <h4>Small demo app for working with Firebase</h4>
 
 - firebase auth 
-- firebase remoteconfig 
-- firebase realtime database 
+- firebase remote config 
+- firebase realtime database
+- firebase crashlytics
+- firebase analytics
 
 `google-service.json` - needed for work
 

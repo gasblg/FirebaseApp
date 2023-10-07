@@ -2,6 +2,7 @@ package com.github.gasblg.firebaseapp.presentation.ui.fragments.main
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.github.gasblg.firebaseapp.analytics.crashlytics.CrashlyticsReporter
 import com.github.gasblg.firebaseapp.domain.interactors.ItemsInteractor
 import com.github.gasblg.firebaseapp.domain.models.*
 import com.github.gasblg.firebaseapp.domain.usecases.datastore.ClearPrefsUseCase
@@ -17,6 +18,7 @@ class MainViewModel @Inject constructor(
     private val getLocalUserUseCase: GetLocalUserUseCase,
     private val clearPrefsUseCase: ClearPrefsUseCase,
     private val itemsInteractor: ItemsInteractor,
+    private val crashlytics: CrashlyticsReporter
 ) : ViewModel() {
 
     private val _profileData = MutableStateFlow(UserProfile())
@@ -44,15 +46,28 @@ class MainViewModel @Inject constructor(
             when (response) {
                 is Response.Loading -> _uiState.value = UiState.Loading
                 is Response.Empty -> _uiState.value = UiState.Empty
-                is Response.Failure -> _uiState.value = UiState.Error(response.e)
+                is Response.Failure -> {
+                    crashlytics.error(MainFragment.TAG, response.e)
+                    _uiState.value = UiState.Error(response.e)
+                }
                 is Response.Success -> _uiState.value = UiState.Success(response.data)
             }
         }
     }
 
-    fun addItem(item: Item) {
+    fun addItem(item: Item?) {
         viewModelScope.launch(Dispatchers.IO) {
-            itemsInteractor.addItem(item)
+            item?.let {
+                itemsInteractor.addItem(it)
+            }
+        }
+    }
+
+    fun editItem(item: Item?) {
+        viewModelScope.launch(Dispatchers.IO) {
+            item?.let {
+                itemsInteractor.editItem(it)
+            }
         }
     }
 
@@ -67,8 +82,8 @@ class MainViewModel @Inject constructor(
 
 
     sealed class UiState {
-        object Loading : UiState()
-        object Empty : UiState()
+        data object Loading : UiState()
+        data object Empty : UiState()
         data class Success(val items: List<Item>) : UiState()
         data class Error(val exception: Throwable) : UiState()
     }

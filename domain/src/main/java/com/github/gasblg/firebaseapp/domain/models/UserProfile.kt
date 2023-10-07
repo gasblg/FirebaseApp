@@ -2,12 +2,16 @@ package com.github.gasblg.firebaseapp.domain.models
 
 
 data class UserProfile(
-    var uid: String? = "",
-    var name: String? = "",
-    var email: String? = "",
-    var photo: String? = ""
-)  {
+    val uid: String? = "",
+    val name: String? = "",
+    val email: String? = "",
+    val photo: String? = "",
+    val dateCreated: String?,
+    val dateSignedIn: String?
+) {
     constructor() : this(
+        "",
+        "",
         "",
         "",
         "",

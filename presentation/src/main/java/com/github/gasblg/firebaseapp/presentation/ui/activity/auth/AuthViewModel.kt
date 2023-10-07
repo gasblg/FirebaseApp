@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.github.gasblg.firebaseapp.domain.models.UserProfile
 import com.github.gasblg.firebaseapp.domain.usecases.datastore.SaveLocalUserUseCase
+import com.github.gasblg.firebaseapp.domain.usecases.date.DateConverterUseCase
 import com.github.gasblg.firebaseapp.domain.usecases.user.SaveUserUseCase
 import com.google.firebase.auth.FirebaseUser
 import kotlinx.coroutines.Dispatchers
@@ -16,7 +17,8 @@ import javax.inject.Singleton
 @Singleton
 class AuthViewModel @Inject constructor(
     private val saveLocalUserUseCase: SaveLocalUserUseCase,
-    private val saveUserUseCase: SaveUserUseCase
+    private val saveUserUseCase: SaveUserUseCase,
+    private val dateConverterUseCase: DateConverterUseCase
 ) : ViewModel() {
 
     private val _saveProfile = MutableStateFlow(false)
@@ -28,8 +30,11 @@ class AuthViewModel @Inject constructor(
             user.uid,
             user.displayName,
             user.email,
-            user.photoUrl.toString()
+            user.photoUrl.toString(),
+            dateConverterUseCase.invoke(user.metadata?.creationTimestamp),
+            dateConverterUseCase.invoke(user.metadata?.lastSignInTimestamp)
         )
+
         saveUserUseCase.invoke(
             profile = profile,
             success = {
