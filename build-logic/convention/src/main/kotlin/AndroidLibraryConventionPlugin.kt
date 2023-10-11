@@ -16,7 +16,6 @@ class AndroidLibraryConventionPlugin : Plugin<Project> {
                 apply("kotlin-kapt")
                 apply("com.google.firebase.crashlytics")
             }
-
             extensions.configure<LibraryExtension> {
                 configureKotlinAndroid(this)
                 defaultConfig.targetSdk = 33

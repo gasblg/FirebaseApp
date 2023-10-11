@@ -1,5 +1,6 @@
 plugins {
     id("firebaseapp.android.application")
+    id("firebaseapp.android.distribution")
     id("com.google.gms.google-services")
     id("kotlin-kapt")
 }

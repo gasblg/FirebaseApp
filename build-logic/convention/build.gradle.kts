@@ -19,7 +19,9 @@ tasks.withType<KotlinCompile>().configureEach {
 dependencies {
     compileOnly(libs.android.gradlePlugin)
     compileOnly(libs.kotlin.gradlePlugin)
+
 }
+
 
 gradlePlugin {
     plugins {
@@ -30,6 +32,10 @@ gradlePlugin {
         register("androidLibrary") {
             id = "firebaseapp.android.library"
             implementationClass = "AndroidLibraryConventionPlugin"
+        }
+        register("androidDistribution") {
+            id = "firebaseapp.android.distribution"
+            implementationClass = "AndroidDistributionPlugin"
         }
     }
 }

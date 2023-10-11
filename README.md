@@ -6,9 +6,10 @@
 
 - firebase auth 
 - firebase remote config 
-- firebase realtime database
+- firebase realtime database (CRUD)
 - firebase crashlytics
 - firebase analytics
+- firebase app distribution
 
 `google-service.json` - needed for work
 

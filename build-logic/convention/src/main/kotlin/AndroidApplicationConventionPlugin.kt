@@ -11,6 +11,7 @@ class AndroidApplicationConventionPlugin : Plugin<Project> {
                 apply("com.android.application")
                 apply("org.jetbrains.kotlin.android")
                 apply("com.google.firebase.crashlytics")
+                apply("com.google.firebase.appdistribution")
             }
 
             extensions.configure<ApplicationExtension> {
