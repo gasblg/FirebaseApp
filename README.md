@@ -9,7 +9,7 @@
 - firebase realtime database (CRUD)
 - firebase crashlytics
 - firebase analytics
-- firebase app distribution
+- firebase app distribution (with feedback)
 
 `google-service.json` - needed for work
 

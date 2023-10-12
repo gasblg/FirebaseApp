@@ -14,6 +14,8 @@ import com.google.firebase.auth.GoogleAuthProvider
 import dagger.android.support.DaggerAppCompatActivity
 import javax.inject.Inject
 import android.app.Activity
+import android.os.Build
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.result.contract.ActivityResultContracts.StartActivityForResult
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
@@ -50,6 +52,12 @@ class AuthActivity : DaggerAppCompatActivity() {
 
     private lateinit var binding: ActivityAuthBinding
 
+    private val notificationPermissionLauncher =
+        registerForActivityResult(ActivityResultContracts.RequestPermission()) {
+            startActivity(Transitions.startMain(this@AuthActivity))
+        }
+
+
     private val activityResult = registerForActivityResult(StartActivityForResult()) { result ->
         if (result.resultCode == Activity.RESULT_OK) {
             val data: Intent? = result.data
@@ -79,6 +87,13 @@ class AuthActivity : DaggerAppCompatActivity() {
             signIn()
         }
     }
+    private fun checkVersionForNotifications() {
+        if (Build.VERSION.SDK_INT >= 33) {
+            notificationPermissionLauncher.launch(android.Manifest.permission.POST_NOTIFICATIONS)
+        } else {
+            startActivity(Transitions.startMain(this@AuthActivity))
+        }
+    }
 
     private fun signIn() {
         activityResult.launch(googleSignInClient.signInIntent)
@@ -91,7 +106,7 @@ class AuthActivity : DaggerAppCompatActivity() {
                     val user = FirebaseAuth.getInstance().currentUser
                     if (it && user != null) {
                         analytics.login()
-                        startActivity(Transitions.startMain(this@AuthActivity))
+                        checkVersionForNotifications()
                     }
                 }
             }
@@ -131,7 +146,7 @@ class AuthActivity : DaggerAppCompatActivity() {
         super.onStart()
         val user = FirebaseAuth.getInstance().currentUser
         if (user != null) {
-            startActivity(Transitions.startMain(this))
+            startActivity(Transitions.startMain(this@AuthActivity))
             finish()
         }
     }

@@ -10,6 +10,7 @@ dagger = "2.48"
 daggerAndroidProcessor = "2.48"
 daggerAndroidSupport = "2.48"
 daggerCompiler = "2.48"
+firebaseAppdistributionApiKtx = "16.0.0-beta10"
 firebaseBom = "32.2.3"
 glide = "4.15.1"
 googleServices = "4.3.15"
@@ -42,6 +43,8 @@ dagger = { module = "com.google.dagger:dagger", version.ref = "dagger" }
 dagger-android-processor = { module = "com.google.dagger:dagger-android-processor", version.ref = "daggerAndroidProcessor" }
 dagger-android-support = { module = "com.google.dagger:dagger-android-support", version.ref = "daggerAndroidSupport" }
 dagger-compiler = { module = "com.google.dagger:dagger-compiler", version.ref = "daggerCompiler" }
+firebase-appdistribution = { module = "com.google.firebase:firebase-appdistribution", version.ref = "firebaseAppdistributionApiKtx" }
+firebase-appdistribution-api-ktx = { module = "com.google.firebase:firebase-appdistribution-api-ktx", version.ref = "firebaseAppdistributionApiKtx" }
 firebase-bom = { group = "com.google.firebase", name = "firebase-bom", version.ref = "firebaseBom" }
 firebase-auth = { module = "com.google.firebase:firebase-auth" }
 firebase-analytics-ktx = { module = "com.google.firebase:firebase-analytics-ktx" }

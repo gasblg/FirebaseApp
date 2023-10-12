@@ -26,4 +26,7 @@ dependencies {
     //images
     implementation (libs.glide)
     implementation(libs.circleimageview)
+
+    implementation(libs.firebase.appdistribution.api.ktx)
+    debugImplementation(libs.firebase.appdistribution)  //only for debug
 }

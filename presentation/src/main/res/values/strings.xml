@@ -18,5 +18,5 @@
     <string name="config_params">Config params updated: %s</string>
     <string name="fetch_and_activate">Fetch and activate</string>
     <string name="fetch_failed">Fetch failed</string>
-
+    <string name="feedback_message">feedback message</string>
 </resources>
