@@ -5,5 +5,5 @@ import com.github.gasblg.firebaseapp.domain.repository.ItemsRepository
 
 class LoadItemsUseCase(private val itemsRepository: ItemsRepository) {
 
-    suspend fun invoke() = itemsRepository.loadItems()
+    suspend fun invoke(userUid: String) = itemsRepository.loadItems(userUid)
 }

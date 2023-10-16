@@ -10,31 +10,36 @@ class ItemsRepositoryImpl(val instance: FirebaseDatabase) : ItemsRepository {
 
     private val itemsRef = instance.getReference(Constants.ITEMS)
 
-    override suspend fun loadItems() = itemsRef.getEventListenerFlowList(Item::class.java)
+    override suspend fun loadItems(userUid: String) =
+        itemsRef.child(userUid).getEventListenerFlowList(Item::class.java)
 
-    override suspend fun loadItem(itemId: String) = itemsRef.child(itemId).getEventListenerFlow(Item::class.java)
+    override suspend fun loadItem(itemId: String, userUid: String) = itemsRef
+        .child(userUid)
+        .child(itemId).getEventListenerFlow(Item::class.java)
 
-    override suspend fun addItem(item: Item) {
+    override suspend fun addItem(item: Item, userUid: String) {
         val key = itemsRef.push().key
         key?.let {
             val value = item.copy(id = it)
             itemsRef
+                .child(userUid)
                 .child(it)
                 .setValue(value)
         }
     }
 
-    override suspend fun editItem(item: Item) {
-            itemsRef
-                .child(item.id)
-                .setValue(item)
+    override suspend fun editItem(item: Item, userUid: String) {
+        itemsRef
+            .child(userUid)
+            .child(item.id)
+            .setValue(item)
     }
 
-    override suspend fun removeItem(itemId: String?) {
+    override suspend fun removeItem(itemId: String?, userUid: String) {
         itemId?.let {
             itemsRef
-                .child(it)
-                .setValue(null)
+                .child(userUid)
+                .child(it).removeValue()
         }
     }
 }

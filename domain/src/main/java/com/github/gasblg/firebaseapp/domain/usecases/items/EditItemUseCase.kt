@@ -6,5 +6,5 @@ import com.github.gasblg.firebaseapp.domain.repository.ItemsRepository
 
 class EditItemUseCase(private val itemsRepository: ItemsRepository) {
 
-    suspend fun invoke(item: Item) = itemsRepository.editItem(item)
+    suspend fun invoke(item: Item, userUid: String) = itemsRepository.editItem(item, userUid)
 }

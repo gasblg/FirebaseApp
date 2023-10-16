@@ -10,6 +10,7 @@ android {
 dependencies {
 
     implementation(project(":domain"))
+    implementation(project(":analytics"))
 
     implementation(libs.androidx.dataStore.core)
     implementation(libs.protobuf.javalite)

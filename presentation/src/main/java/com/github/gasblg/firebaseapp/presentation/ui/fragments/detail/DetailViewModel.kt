@@ -1,32 +1,48 @@
 package com.github.gasblg.firebaseapp.presentation.ui.fragments.detail
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.github.gasblg.firebaseapp.Logger
 import com.github.gasblg.firebaseapp.analytics.crashlytics.CrashlyticsReporter
 import com.github.gasblg.firebaseapp.domain.interactors.ItemsInteractor
 import com.github.gasblg.firebaseapp.domain.models.*
+import com.github.gasblg.firebaseapp.domain.usecases.datastore.GetLocalUserUseCase
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.launch
 import javax.inject.Inject
-import javax.inject.Singleton
 
-@Singleton
 class DetailViewModel @Inject constructor(
     private val itemsInteractor: ItemsInteractor,
-    private val crashlytics: CrashlyticsReporter
+    private val crashlytics: CrashlyticsReporter,
+    private val getLocalUserUseCase: GetLocalUserUseCase
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow<UiState>(UiState.Loading)
     val uiState: StateFlow<UiState> = _uiState
 
+    private var user: UserProfile? = null
+
+    init {
+        viewModelScope.launch(Dispatchers.IO) {
+            getUserInfo()
+        }
+    }
+
+    private suspend fun getUserInfo() {
+        user = getLocalUserUseCase.invoke()
+    }
 
     suspend fun getItem(itemId: String) {
-        itemsInteractor.loadItem(itemId).collect { response ->
+        itemsInteractor.loadItem(itemId, user?.uid ?: "").collect { response ->
             when (response) {
                 is Response.Loading -> _uiState.value = UiState.Loading
                 is Response.Empty -> _uiState.value = UiState.Empty
                 is Response.Failure -> {
-                    crashlytics.error(DetailFragment.TAG, response.e)
+                    crashlytics.error(Logger.TAG, response.e)
                     _uiState.value = UiState.Error(response.e)
                 }
+
                 is Response.Success -> _uiState.value = UiState.Success(response.data)
             }
         }

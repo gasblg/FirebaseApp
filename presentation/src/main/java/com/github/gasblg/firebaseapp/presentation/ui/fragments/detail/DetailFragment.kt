@@ -105,8 +105,4 @@ class DetailFragment : DaggerFragment() {
         }
     }
 
-    companion object {
-        const val TAG = "DetailFragment"
-    }
-
 }

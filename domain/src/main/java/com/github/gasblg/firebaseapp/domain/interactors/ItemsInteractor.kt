@@ -6,13 +6,13 @@ import kotlinx.coroutines.flow.Flow
 
 interface ItemsInteractor {
 
-    suspend fun loadItems(): Flow<Response<List<Item>>>
+    suspend fun loadItems(userUid: String): Flow<Response<List<Item>>>
 
-    suspend fun loadItem(itemId: String): Flow<Response<Item>>
+    suspend fun loadItem(itemId: String, userUid: String): Flow<Response<Item>>
 
-    suspend fun addItem(item: Item)
+    suspend fun addItem(item: Item, userUid: String)
 
-    suspend fun editItem(item: Item)
+    suspend fun editItem(item: Item, userUid: String)
 
-    suspend fun removeItem(itemId: String?)
+    suspend fun removeItem(itemId: String?, userUid: String)
 }

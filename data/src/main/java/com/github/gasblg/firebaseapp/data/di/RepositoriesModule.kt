@@ -1,6 +1,7 @@
 package com.github.gasblg.firebaseapp.data.di
 
 import android.content.Context
+import com.github.gasblg.firebaseapp.analytics.crashlytics.CrashlyticsReporter
 import com.github.gasblg.firebaseapp.data.repository.impl.DataStoreRepositoryImpl
 import com.github.gasblg.firebaseapp.data.repository.impl.ItemsRepositoryImpl
 import com.github.gasblg.firebaseapp.data.repository.impl.RemoteConfigRepositoryImpl
@@ -35,9 +36,10 @@ class RepositoriesModule {
     @Singleton
     fun provideRemoteConfigRepository(
         instance: FirebaseRemoteConfig,
-        context: Context
+        context: Context,
+        crashlyticsReporter: CrashlyticsReporter
     ): RemoteConfigRepository {
-        return RemoteConfigRepositoryImpl(instance, context)
+        return RemoteConfigRepositoryImpl(instance, context, crashlyticsReporter)
     }
 
     @Provides

@@ -13,14 +13,18 @@ class ItemsInteractorImpl(
     private val removeItemUseCase: RemoveItemUseCase
 ) : ItemsInteractor {
 
-    override suspend fun loadItems(): Flow<Response<List<Item>>> = loadItemsUseCase.invoke()
+    override suspend fun loadItems(userUid: String): Flow<Response<List<Item>>> =
+        loadItemsUseCase.invoke(userUid)
 
-    override suspend fun loadItem(itemId: String): Flow<Response<Item>> = loadItemUseCase.invoke(itemId)
+    override suspend fun loadItem(itemId: String, userUid: String): Flow<Response<Item>> =
+        loadItemUseCase.invoke(itemId, userUid)
 
-    override suspend fun addItem(item: Item) = addItemUseCase.invoke(item)
+    override suspend fun addItem(item: Item, userUid: String) = addItemUseCase.invoke(item, userUid)
 
-    override suspend fun editItem(item: Item) = editItemUseCase.invoke(item)
+    override suspend fun editItem(item: Item, userUid: String) =
+        editItemUseCase.invoke(item, userUid)
 
-    override suspend fun removeItem(itemId: String?) = removeItemUseCase.invoke(itemId)
+    override suspend fun removeItem(itemId: String?, userUid: String) =
+        removeItemUseCase.invoke(itemId, userUid)
 
 }
