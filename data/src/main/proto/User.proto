@@ -1,0 +1,13 @@
+syntax = "proto3";
+
+option java_package = "com.github.gasblg.firebaseapp";
+option java_multiple_files = true;
+
+message User{
+  string uid = 1;
+  string name = 2;
+  string email = 3;
+  string photo = 4;
+  string dateCreated = 5;
+  string dateSignedIn = 6;
+}

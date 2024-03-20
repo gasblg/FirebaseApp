@@ -1,0 +1,72 @@
+[versions]
+androidDesugarJdkLibs = "2.0.3"
+androidGradlePlugin = "8.2.2"
+androidxAppCompat = "1.6.1"
+androidxCore = "1.9.0"
+androidxDataStore = "1.0.0"
+circleimageview = "3.1.0"
+constraintlayout = "2.1.4"
+dagger = "2.48"
+daggerAndroidProcessor = "2.48"
+daggerAndroidSupport = "2.48"
+daggerCompiler = "2.48"
+firebaseAppdistributionApiKtx = "16.0.0-beta10"
+firebaseBom = "32.2.3"
+glide = "4.15.1"
+googleServices = "4.3.15"
+gson = "2.10.1"
+junit = "1.1.5"
+espresso = "3.5.1"
+junit4 = "4.13.2"
+kotlin = "1.9.0"
+material = "1.9.0"
+navigationFragmentKtx = "2.6.0"
+navigationUiKtx = "2.6.0"
+playServicesAuth = "20.7.0"
+protobufJavalite = "3.24.0"
+firebaseCrashlyticsPlugin = "2.9.2"
+firebase-appdistribution = "4.0.0"
+org-jetbrains-kotlin-android = "1.8.0"
+
+[libraries]
+android-desugarJdkLibs = { group = "com.android.tools", name = "desugar_jdk_libs", version.ref = "androidDesugarJdkLibs" }
+androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "androidxAppCompat" }
+androidx-constraintlayout = { module = "androidx.constraintlayout:constraintlayout", version.ref = "constraintlayout" }
+androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "androidxCore" }
+androidx-dataStore-core = { group = "androidx.datastore", name = "datastore", version.ref = "androidxDataStore" }
+androidx-junit = { module = "androidx.test.ext:junit", version.ref = "junit" }
+espresso = { module = "androidx.test.espresso:espresso-core", version.ref = "espresso" }
+androidx-navigation-fragment-ktx = { module = "androidx.navigation:navigation-fragment-ktx", version.ref = "navigationFragmentKtx" }
+androidx-navigation-ui-ktx = { module = "androidx.navigation:navigation-ui-ktx", version.ref = "navigationUiKtx" }
+circleimageview = { module = "de.hdodenhof:circleimageview", version.ref = "circleimageview" }
+dagger = { module = "com.google.dagger:dagger", version.ref = "dagger" }
+dagger-android-processor = { module = "com.google.dagger:dagger-android-processor", version.ref = "daggerAndroidProcessor" }
+dagger-android-support = { module = "com.google.dagger:dagger-android-support", version.ref = "daggerAndroidSupport" }
+dagger-compiler = { module = "com.google.dagger:dagger-compiler", version.ref = "daggerCompiler" }
+firebase-appdistribution = { module = "com.google.firebase:firebase-appdistribution", version.ref = "firebaseAppdistributionApiKtx" }
+firebase-appdistribution-api-ktx = { module = "com.google.firebase:firebase-appdistribution-api-ktx", version.ref = "firebaseAppdistributionApiKtx" }
+firebase-bom = { group = "com.google.firebase", name = "firebase-bom", version.ref = "firebaseBom" }
+firebase-auth = { module = "com.google.firebase:firebase-auth" }
+firebase-analytics-ktx = { module = "com.google.firebase:firebase-analytics-ktx" }
+firebase-crashlytics-ktx = { module = "com.google.firebase:firebase-crashlytics-ktx" }
+firebase-remoteconfig = { module = "com.google.firebase:firebase-config-ktx" }
+firebase-database = { module = "com.google.firebase:firebase-database" }
+glide = { module = "com.github.bumptech.glide:glide", version.ref = "glide" }
+google-services = { module = "com.google.gms:google-services", version.ref = "googleServices" }
+gson = { module = "com.google.code.gson:gson", version.ref = "gson" }
+junit4 = { group = "junit", name = "junit", version.ref = "junit4" }
+material = { module = "com.google.android.material:material", version.ref = "material" }
+play-services-auth = { module = "com.google.android.gms:play-services-auth", version.ref = "playServicesAuth" }
+protobuf-javalite = { module = "com.google.protobuf:protobuf-javalite", version.ref = "protobufJavalite" }
+# Dependencies of the included build-logic
+android-gradlePlugin = { group = "com.android.tools.build", name = "gradle", version.ref = "androidGradlePlugin" }
+kotlin-gradlePlugin = { group = "org.jetbrains.kotlin", name = "kotlin-gradle-plugin", version.ref = "kotlin" }
+
+[plugins]
+android-application = { id = "com.android.application", version.ref = "androidGradlePlugin" }
+kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
+firebase-crashlytics = { id = "com.google.firebase.crashlytics", version.ref = "firebaseCrashlyticsPlugin" }
+firebase-appdistribution = { id = "com.google.firebase.appdistribution", version.ref = "firebase-appdistribution" }
+com-android-library = { id = "com.android.library", version.ref = "androidGradlePlugin" }
+org-jetbrains-kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "org-jetbrains-kotlin-android" }
+

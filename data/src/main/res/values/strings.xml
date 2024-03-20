@@ -1,0 +1,19 @@
+<resources>
+    <string name="app_name">FirebaseApp</string>
+
+    <string name="cancel">Cancel</string>
+    <string name="yes_delete">Yes, remove it</string>
+    <string name="remove_item">Remove item?</string>
+    <string name="add_item">Add item</string>
+    <string name="add">Add</string>
+    <string name="name">Name</string>
+    <string name="description">Description</string>
+    <string name="empty">List is empty</string>
+    <string name="not_filled">fields are not filled</string>
+    <string name="list_of_items">Items:</string>
+    <string name="sign_in_failed">"Google sign in failed:("</string>
+    <string name="config_params">Config params updated: %s</string>
+    <string name="fetch_and_activate">Fetch and activate</string>
+    <string name="fetch_failed">Fetch failed</string>
+
+</resources>
